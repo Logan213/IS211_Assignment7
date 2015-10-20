@@ -52,6 +52,10 @@ class Player(object):
         print self.name
 
     def turn_choice(self):
+        """Pig player game turn decision. Asks a player if they would like to
+        hold or roll the dice to keep points, or roll again to risk losing or
+        add more, respectively.
+        """
         choice = raw_input('{}, Hold or Roll?'.format(self.name))
         choice = str(choice[0]).lower()
         if choice == 'h':
@@ -59,7 +63,7 @@ class Player(object):
             if self.totscore >= 100:
                 print ('{} wins with '
                        'a score of {}.').format(self.name, self.totscore)
-                # Game Over
+                # Need End Game Function.
             else:
                 self.turnscore = 0
                 print ('{}\'s score is {}.'
@@ -68,7 +72,8 @@ class Player(object):
                 Game.next_player(Game)
         elif choice == 'r':
             Game.turn(self.name)
-            
+
+
 class Game(object):
     """A game rules class."""
     def __init__(self, player1, player2):
@@ -80,7 +85,7 @@ class Game(object):
 
 
     def turn(self, player):
-        """Docstring."""
+        """The initial turn function for the Pig game."""
         player.turn_status = 1
         while player.turn_status == 1 and player.totscore < 100:
             roll = self.die.roll()
@@ -99,7 +104,7 @@ class Game(object):
 
 
     def next_player(self):
-        """Docstring."""
+        """Swithces to the next player in the game."""
         if self.player1.turn_status == 1:
             self.player1.turn_status = 0
             self.turn(self.player2)
