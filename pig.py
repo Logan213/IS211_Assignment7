@@ -10,68 +10,27 @@ class Die(object):
     """A dice class.
 
     Generates a random number from 1 to 6.
-
-    Args:
-        None.
-
-    Attribues:
-        None
     """
 
     random.seed(0)
 
     def __init__(self):
-        """Constructor for the Die() class.
-
-        Args:
-            None.
-
-        Attributes:
-            None.
-
-        Returns:
-            None.
-        """"
+        """Constructor for the Die() class."""
         self.rolled = 0
 
     def roll(self):
-        """Returns a randomly generated number between 1 and 6 to be used in
-        a turn of the game Pig.
-        """
         self.rolled = random.randint(1, 6)
         return self.rolled
 
 
 class Player(object):
-    """A pig game player class."""
+    """docstring"""
     def __init__(self, name):
         self.name = name
         self.totscore = 0
         self.turnscore = 0
         self.turn_status = 0
-        print self.name
-
-    def turn_choice(self):
-        """Pig player game turn decision. Asks a player if they would like to
-        hold or roll the dice to keep points, or roll again to risk losing or
-        add more, respectively.
-        """
-        choice = raw_input('{}, Hold or Roll?'.format(self.name))
-        choice = str(choice[0]).lower()
-        if choice == 'h':
-            self.totscore += self.turnscore
-            if self.totscore >= 100:
-                print ('{} wins with '
-                       'a score of {}.').format(self.name, self.totscore)
-                # Need End Game Function.
-            else:
-                self.turnscore = 0
-                print ('{}\'s score is {}.'
-                       ' Pass die to next'
-                       'player.').format(self.name, self.totscore)
-                Game.next_player(Game)
-        elif choice == 'r':
-            Game.turn(self.name)
+        #print self.name
 
 
 class Game(object):
@@ -96,11 +55,41 @@ class Game(object):
                 player.turnscore = 0
                 self.next_player()
             else:
-                print 'You rolled a {}.'.format(roll)
+                print '{} rolled a {}.'.format(player.name, roll)
                 player.turnscore += roll
                 print ('Your current total '
                        'for this turn is {}.').format(player.turnscore)
-                player.turn_choice()
+                self.turn_choice(player)
+
+
+    def turn_choice(self, player):
+        """Pig player game turn decision. Asks a player if they would like to
+        hold or roll the dice to keep points, or roll again to risk losing or
+        add more, respectively.
+        """
+        choice = raw_input('{}, Hold or Roll?'.format(player.name))
+        choice = (choice[0])
+        if choice.lower() == 'h':
+            player.totscore += player.turnscore
+            if player.totscore >= 100:
+                print ('{} wins with '
+                       'a score of {}.').format(player.name, player.totscore)
+                # Need End Game Function.
+            else:
+                player.turnscore = 0
+                print ('{}\'s score is {}.'
+                       ' Pass die to next'
+                       'player.').format(player.name, player.totscore)
+                self.next_player()
+        elif choice.lower() == 'r':
+            self.turn(player)
+            if player.totscore >= 100:
+                print ('{} wins with '
+                       'a score of {}.').format(player.name, player.totscore)
+                # Play again or exit?
+        else:
+            print '**Enter Hold or Roll, without quotes.**'
+            # raise exception?
 
 
     def next_player(self):
